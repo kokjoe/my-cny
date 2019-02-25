@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using my_cny.API.Data;
 
 namespace my_cny.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190130084246_mi4")]
+    partial class mi4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,22 +46,14 @@ namespace my_cny.API.Migrations
                     b.Property<string>("ContactNo")
                         .HasMaxLength(20);
 
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<DateTime>("EditedDate");
-
                     b.Property<int>("IdentificationId");
 
                     b.Property<string>("IdentificationNo")
                         .HasMaxLength(20);
 
-                    b.Property<bool>("IsAudit");
-
                     b.Property<int?>("PatientId");
 
                     b.Property<int>("RelationshipId");
-
-                    b.Property<int>("Version");
 
                     b.HasKey("EmergencyContactId");
 
@@ -78,16 +72,8 @@ namespace my_cny.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<DateTime>("EditedDate");
-
                     b.Property<string>("IdentificationName")
                         .HasMaxLength(50);
-
-                    b.Property<bool>("IsAudit");
-
-                    b.Property<int>("Version");
 
                     b.HasKey("IdentificationId");
 
@@ -100,13 +86,7 @@ namespace my_cny.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CreatedBy");
-
-                    b.Property<DateTime>("CreatedDate");
-
                     b.Property<DateTime?>("DOB");
-
-                    b.Property<DateTime>("EditedDate");
 
                     b.Property<string>("Gender")
                         .HasMaxLength(1);
@@ -115,8 +95,6 @@ namespace my_cny.API.Migrations
 
                     b.Property<string>("IdentificationNo")
                         .HasMaxLength(20);
-
-                    b.Property<bool>("IsAudit");
 
                     b.Property<string>("MRN")
                         .HasMaxLength(20);
@@ -127,8 +105,6 @@ namespace my_cny.API.Migrations
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
-
-                    b.Property<int>("Version");
 
                     b.Property<int?>("ZipCode");
 
@@ -145,55 +121,12 @@ namespace my_cny.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CreatedBy");
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<DateTime>("EditedDate");
-
-                    b.Property<bool>("IsAudit");
-
                     b.Property<string>("RelationshipName")
                         .HasMaxLength(20);
-
-                    b.Property<int>("Version");
 
                     b.HasKey("RelationshipId");
 
                     b.ToTable("Relationships");
-                });
-
-            modelBuilder.Entity("my_cny.API.Model.Visit", b =>
-                {
-                    b.Property<int>("VisitId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedDate");
-
-                    b.Property<DateTime>("EditedDate");
-
-                    b.Property<bool>("IsAudit");
-
-                    b.Property<int>("PatientId");
-
-                    b.Property<int>("Version");
-
-                    b.Property<DateTime>("VisitDate");
-
-                    b.Property<string>("VisitNo")
-                        .IsRequired()
-                        .HasMaxLength(20);
-
-                    b.Property<string>("VisitType")
-                        .IsRequired()
-                        .HasMaxLength(20);
-
-                    b.HasKey("VisitId");
-
-                    b.HasIndex("PatientId");
-
-                    b.ToTable("Visits");
                 });
 
             modelBuilder.Entity("my_cny.API.Model.EmergencyContact", b =>
@@ -218,14 +151,6 @@ namespace my_cny.API.Migrations
                     b.HasOne("my_cny.API.Model.Identification", "Identification")
                         .WithMany()
                         .HasForeignKey("IdentificationId");
-                });
-
-            modelBuilder.Entity("my_cny.API.Model.Visit", b =>
-                {
-                    b.HasOne("my_cny.API.Model.Patient", "Patient")
-                        .WithMany()
-                        .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

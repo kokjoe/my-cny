@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using my_cny.API.Data;
 using AutoMapper;
+using Newtonsoft.Json.Serialization;
 
 namespace my_cny.API
 {
@@ -29,7 +30,15 @@ namespace my_cny.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddJsonOptions(options => {
+                    var resolver = options.SerializerSettings.ContractResolver;
+                    if (resolver != null) {
+                        (resolver as DefaultContractResolver).NamingStrategy = null;
+                    }
+                });
+            services.AddScoped<IPatientRepo, PatientRepo>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddCors();
             services.AddAutoMapper();
         }

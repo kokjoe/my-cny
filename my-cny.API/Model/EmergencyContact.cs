@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace my_cny.API.Model
@@ -14,5 +15,9 @@ namespace my_cny.API.Model
         public string IdentificationNo { get; set; }
         public Identification Identification { get; set; }
         public int IdentificationId { get; set; }
+        public int Version { get; set; }
+        public bool IsAudit { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime EditedDate { get; set; }
     }
 }

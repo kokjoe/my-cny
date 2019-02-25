@@ -1,10 +1,11 @@
 export interface Patient {
-    id: number;
-    name: string;
-    mrn: string;
-    gender: string;
-    dob: Date;
-    zipcode?: number;
-    idNo: string;
-    idType: string;
+    patientId: number;
+    patientName: string;
+    // mrn?: string;
+    // gender?: string;
+    // dob?: Date;
+    // zipCode?: number;
+    // identificationNo?: string;
+    // identificationId: number;
+
 }

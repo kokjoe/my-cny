@@ -1,0 +1,92 @@
+<button mat-button [matMenuTriggerFor]="menu">HIS Menu</button>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item>Patient</button>
+  <button mat-menu-item>Visit</button>
+</mat-menu>
+
+<form [formGroup]="visitForm" (ngSubmit)="saveVisit()">
+
+    <div class="Container">
+      <button mat-raised-button type="submit" color="warn" class="mrg">Save</button>
+    </div>
+
+  <mat-card class="mrg">
+
+    <mat-card-header>
+      <mat-card-title>Visit</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="container">
+          <div>
+                <mat-radio-group formControlName="VisitType">
+                  <mat-radio-button *ngFor="let t of visitType" [value]="t">
+                    {{t}}
+                  </mat-radio-button>
+                </mat-radio-group>
+          </div>
+      </div>
+      <div class="container">
+        <div>
+          <mat-form-field appearance="outline" class="input-full-width">
+            <mat-label>Patient Name</mat-label>
+            <input matInput placeholder="Patient Name" formControlName="PatientId" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFnWrapper()">
+              <mat-option *ngFor="let p of filteredOptions | async" [value]="p.patientId">
+                {{p.patientName}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="container">
+        <div>
+          <mat-form-field appearance="outline" class="input-full-width">
+              <mat-label>Visit No</mat-label>
+              <input matInput placeholder="Visit No" formControlName="VisitNo">
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field appearance="outline" class="input-full-width">
+            <mat-label>Visit Date</mat-label>
+            <input matInput [matDatepicker]="picker" placeholder="Visit Date" formControlName="VisitDate">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+
+  </mat-card>
+
+  <mat-card class="mrg">
+      <mat-card-header>
+        <mat-card-title>Visit Listing</mat-card-title>
+      </mat-card-header>
+    
+      <mat-card-content>
+        <dx-data-grid #visitGrid id="gridContainer"
+          [dataSource]="visits"
+          [hoverStateEnabled]="true"
+          [showBorders]="true"
+          (onRowClick)="rowClickEvent($event)">
+          <dxo-selection mode="single"></dxo-selection>
+          <dxi-column dataField="VisitNo"></dxi-column>
+          <dxi-column dataField="VisitType"></dxi-column>
+          <dxi-column dataField="Patient.PatientName">Name</dxi-column>
+          <dxi-column dataField="VisitDate"></dxi-column>
+          <dxo-remote-operations
+              [sorting]="true"
+              [paging]="true">
+          </dxo-remote-operations>
+          <dxo-paging [pageSize]="5"></dxo-paging>
+          <!-- <dxo-pager
+              [showPageSizeSelector]="true"
+              [allowedPageSizes]="[8, 12, 20]"
+          ></dxo-pager> -->
+        </dx-data-grid>
+      </mat-card-content>
+  </mat-card>  
+
+</form>

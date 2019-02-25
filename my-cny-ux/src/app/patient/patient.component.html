@@ -1,7 +1,10 @@
+
+<form [formGroup]="patientForm" (ngSubmit)="savePatient()">
+
 <div class="Container">
-  <button mat-button>Click me!</button>
+  <button mat-raised-button type="submit">Save</button>
 </div>
-{{patients[0].patientName | async}}
+<!-- {{patients[0].patientName | async}} -->
 <mat-tab-group>
   <mat-tab label="Patient Demographic">
     <!-- <ng-template mat-tab-label>
@@ -14,61 +17,60 @@
           </mat-card-header>
         
           <mat-card-content>
-            <div class="container">
-              <div>
-                  <mat-form-field class="input-full-width">
-                    <input matInput placeholder="Patient MRN">
-                  </mat-form-field>
-              </div>
-              <div>
-                  <mat-form-field class="input-full-width">
-                    <input matInput placeholder="Patient Name">
-                  </mat-form-field>
-              </div> 
-            </div>
-        
-            <div class="container">
-              <div>     
-                  <mat-radio-group class="input-full-width">
-                    <mat-radio-button value="M">Male</mat-radio-button>
-                    <mat-radio-button value="F">Female</mat-radio-button>
-                    <mat-radio-button value="U">Unknown</mat-radio-button>
-                  </mat-radio-group>
-              </div>
-              <div>
-                  <mat-form-field class="input-full-width">
-                    <input matInput [matDatepicker]="picker" placeholder="Patient DOB">
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                  </mat-form-field>   
-              </div>   
-            </div>
-        
-            <div class="container">
-              <div>
-                <mat-form-field class="input-full-width">
-                  <mat-select placeholder="Identification Type" class="input-full-width">
-                    <!-- <mat-option *ngFor="let food of foods" [value]="food.value">
-                      {{food.viewValue}}
-                    </mat-option> -->
-                    <mat-option>
-                      
-                    </mat-option>
-        
-                  </mat-select>
-                </mat-form-field>
-              </div>
-              <div>
-                  <mat-form-field class="input-full-width">
-                    <input matInput placeholder="Patient Identification Number">
-                  </mat-form-field>
-              </div>      
-            </div>  
+            
+                <div class="container">
+                  <div>
+                      <mat-form-field class="input-full-width">
+                        <input matInput placeholder="Patient MRN" formControlName="MRN">
+                      </mat-form-field>
+                  </div>
+                  <div>
+                      <mat-form-field class="input-full-width">
+                        <input matInput placeholder="Patient Name" formControlName="PatientName">
+                      </mat-form-field>
+                  </div> 
+                </div>
+            
+                <div class="container">
+                  <div>     
+                      <mat-radio-group class="input-full-width" formControlName="Gender">
+                        <mat-radio-button value="M">Male</mat-radio-button>
+                        <mat-radio-button value="F">Female</mat-radio-button>
+                        <mat-radio-button value="U">Unknown</mat-radio-button>
+                      </mat-radio-group>
+                  </div>
+                  <div>
+                      <mat-form-field class="input-full-width">
+                        <input matInput [matDatepicker]="picker" placeholder="Patient DOB" formControlName="DOB">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                      </mat-form-field>   
+                  </div>   
+                </div>
+            
+                <div class="container">
+                  <div>
+                    <mat-form-field class="input-full-width">
+                      <mat-select placeholder="Identification Type" class="input-full-width" formControlName="IdentificationId">
+                        <mat-option *ngFor="let iden of identifications" [value]="iden.IdentificationId">
+                          {{iden.IdentificationName}}
+                        </mat-option>
+            
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div>
+                      <mat-form-field class="input-full-width">
+                        <input matInput placeholder="Patient Identification Number" formControlName="IdentificationNo">
+                      </mat-form-field>
+                  </div>      
+                </div>
+            
           </mat-card-content>
         
       </mat-card>
-        
-      <br>
+
+      <hr>
         
       <mat-card>
           <mat-card-header>
@@ -77,14 +79,26 @@
           </mat-card-header>
         
           <mat-card-content>
-            <dx-data-grid id="gridContainer"
+            <dx-data-grid #patientGrid id="gridContainer"
               [dataSource]="patients"
-              [showBorders]="true">
-              <dxi-column dataField="patientName"></dxi-column>
-              <dxi-column dataField="mrn"></dxi-column>
-              <dxi-column dataField="gender"></dxi-column>
-              <dxi-column dataField="dob"></dxi-column>
-              <dxi-column dataField="identificationNo"></dxi-column>
+              [hoverStateEnabled]="true"
+              [showBorders]="true"
+              (onRowClick)="rowClickEvent($event)">
+              <dxo-selection mode="single"></dxo-selection>
+              <dxi-column dataField="PatientName"></dxi-column>
+              <dxi-column dataField="MRN"></dxi-column>
+              <dxi-column dataField="Gender"></dxi-column>
+              <dxi-column dataField="DOB"></dxi-column>
+              <dxi-column dataField="IdentificationNo"></dxi-column>
+              <dxo-remote-operations
+                  [sorting]="true"
+                  [paging]="true">
+              </dxo-remote-operations>
+              <dxo-paging [pageSize]="5"></dxo-paging>
+              <!-- <dxo-pager
+                  [showPageSizeSelector]="true"
+                  [allowedPageSizes]="[8, 12, 20]"
+              ></dxo-pager> -->
             </dx-data-grid>
           </mat-card-content>
       </mat-card>  
@@ -94,48 +108,57 @@
 
   <mat-tab label="Emergency Contact">
       <mat-card>
-          <mat-card-header>
+        <mat-card-header>
             <mat-card-title>Emergency Contact</mat-card-title>
-        
-          </mat-card-header>
-    
-        <mat-card-content>
-            <div class="container">
-              <div>
-                  <mat-form-field class="input-full-width">
-                    <input matInput placeholder="Relationship">
-                  </mat-form-field>
-              </div>
-              <div>
-                  <mat-form-field class="input-full-width">
-                    <input matInput placeholder="Contact Number">
-                  </mat-form-field>
-              </div> 
-            </div>
-        </mat-card-content>
+        </mat-card-header>
 
-        <mat-card-content>
-            <div class="container">
+        <form [formGroup]="contactForm" (ngSubmit)="addContact()">
+
+            <div class="Container">
+                <button mat-raised-button type="submit" color="warn">Add</button>
+                <button mat-raised-button color="primary" (click)="resetContact()">New</button>
+            </div>
+
+          <mat-card-content>
+              <div class="container">
                 <div>
-                  <mat-form-field class="input-full-width">
-                    <mat-select placeholder="Identification Type" class="input-full-width">
-                      <!-- <mat-option *ngFor="let food of foods" [value]="food.value">
-                        {{food.viewValue}}
-                      </mat-option> -->
-                      <mat-option>
-                        
-                      </mat-option>
-          
-                    </mat-select>
-                  </mat-form-field>
+                    <mat-form-field class="input-full-width">
+                      <mat-select placeholder="Relationship" class="input-full-width" formControlName="RelationshipId">
+                          <mat-option *ngFor="let rel of relationships" [value]="rel.RelationshipId">
+                            {{rel.RelationshipName}}
+                          </mat-option>
+              
+                      </mat-select>
+                    </mat-form-field>
                 </div>
                 <div>
                     <mat-form-field class="input-full-width">
-                      <input matInput placeholder="Identification Number">
+                      <input matInput placeholder="Contact Number" formControlName="ContactNo">
                     </mat-form-field>
-                </div>      
-              </div>  
-        </mat-card-content>
+                </div> 
+              </div>
+          </mat-card-content>
+
+          <mat-card-content>
+              <div class="container">
+                  <div>
+                    <mat-form-field class="input-full-width">
+                      <mat-select placeholder="Identification Type" class="input-full-width" formControlName="IdentificationId">
+                          <mat-option *ngFor="let iden of identifications" [value]="iden.IdentificationId">
+                              {{iden.IdentificationName}}
+                          </mat-option>
+            
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div>
+                      <mat-form-field class="input-full-width">
+                        <input matInput placeholder="Identification Number" formControlName="IdentificationNo">
+                      </mat-form-field>
+                  </div>      
+                </div>  
+          </mat-card-content>
+        </form>
     </mat-card>
 
     <br>
@@ -147,12 +170,18 @@
         </mat-card-header>
       
         <mat-card-content>
-          <dx-data-grid id="gridContainer"
-          [dataSource]="dataSource"
-          [showBorders]="true">
-          <dxi-column dataField="Relationship"></dxi-column>
-          <dxi-column dataField="Contact Number"></dxi-column>
-          <dxi-column dataField="Identification Number"></dxi-column>
+          <dx-data-grid id="contactGrid"
+            [dataSource]="contactObj"
+            [hoverStateEnabled]="true"
+            [showBorders]="true"
+            (onRowClick)=contactGridClick($event)>
+            <!-- <dxi-column dataField="RelationshipId">
+              <dxo-lookup [dataSource]="relationships" valueExpr="RelationshipId" 
+                  displayExpr="RelationshipName">
+              </dxo-lookup>
+            </dxi-column> -->
+            <dxi-column dataField="ContactNo"></dxi-column>
+            <dxi-column dataField="IdentificationNo"></dxi-column>
       
           </dx-data-grid>
       
@@ -164,3 +193,4 @@
 
 </mat-tab-group>
 
+</form>

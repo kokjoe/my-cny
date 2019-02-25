@@ -1,4 +1,5 @@
 using AutoMapper;
+using my_cny.API.Controllers.Resource;
 using my_cny.API.Model;
 using my_cny.API.Resource;
 
@@ -10,6 +11,7 @@ namespace my_cny.API.Mapper
         {
             // model to API
             CreateMap<Patient, PatientResource>()
+            //.ForMember(p => p.PatientId, opt => opt.Ignore())
             .ForMember(p => p.EmergencyContactsResource, opt => opt
                 .MapFrom(a => a.EmergencyContacts))
             .ForMember(p => p.IdentificationResource, opt => opt
@@ -22,6 +24,7 @@ namespace my_cny.API.Mapper
             CreateMap<Relationship, RelationshipResource>().ReverseMap();
             CreateMap<Identification, IdentificationResource>().ReverseMap();
             CreateMap<CurrentMRN, CurrentMRNResource>().ReverseMap();
+            CreateMap<Visit, VisitResource>().ReverseMap();
 
             //API to model
         }

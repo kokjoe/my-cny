@@ -7,20 +7,33 @@ import {MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatNativeDateModule, MatSelectModule, MatTabsModule} from '@angular/material/';
+import {
+   MatNativeDateModule,
+   MatSelectModule,
+   MatTabsModule,
+   MatSidenavModule,
+   MatToolbarModule,
+   MatIconModule,
+   MatListModule,
+   MatMenuModule,
+   MatAutocompleteModule,
+   MatSnackBarModule
+} from '@angular/material/';
+import { RouterModule } from '@angular/router';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { DxDataGridModule } from 'devextreme-angular';
-
 import { AppComponent } from './app.component';
 import { PatientComponent } from './patient/patient.component';
 import { PatientService } from './_services/patient.service';
-
-
+import { VisitComponent } from './visit/visit.component';
+// import { routing } from './routes';
 
 
 @NgModule({
    declarations: [
       AppComponent,
-      PatientComponent
+      PatientComponent,
+      VisitComponent
    ],
    imports: [
       BrowserModule,
@@ -33,8 +46,19 @@ import { PatientService } from './_services/patient.service';
       MatDatepickerModule,
       MatNativeDateModule,
       MatSelectModule,
+      MatSidenavModule,
+      MatToolbarModule,
+      MatIconModule,
+      MatListModule,
+      MatMenuModule,
+      MatAutocompleteModule,
+      MatSnackBarModule,
       DxDataGridModule,
-      MatTabsModule
+      MatTabsModule,
+      FormsModule,
+      ReactiveFormsModule,
+      RouterModule,
+      // routing
    ],
    providers: [
       PatientService
